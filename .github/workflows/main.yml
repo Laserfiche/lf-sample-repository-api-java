@@ -26,4 +26,4 @@ jobs:
       run: echo "`pwd`"
       
     - name: Run with Maven
-      run: java -jar /target/HelloWorld-1.0-SNAPSHOT.jar
+      run: java -jar HelloWorld-1.0-SNAPSHOT.jar
