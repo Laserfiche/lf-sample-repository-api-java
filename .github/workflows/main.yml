@@ -26,7 +26,7 @@ jobs:
       run: mvn -B package --file pom.xml
       
     - name: Current directory  
-      run: echo "switched `pwd`"
+      run: echo "`pwd`"
       
     - name: Run with Maven
-      run: java Helloworld.java
+      run: java -jar ./target/HelloWorld-1.0-SNAPSHOT.jar
