@@ -23,7 +23,7 @@ jobs:
       run: mvn -B package --file pom.xml
       
     - name: Current directory  
-      run: echo "`ls -l` and `pwd`"
+      run: cd target && echo "`ls -l` and `pwd`"
       
     - name: Run with Maven
       run: cd target && java -jar HelloWorld-1.0-SNAPSHOT.jar
