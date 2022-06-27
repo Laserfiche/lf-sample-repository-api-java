@@ -25,5 +25,8 @@ jobs:
     - name: Current directory  
       run: echo "`pwd`"
       
+    - name: Go to target directory
+      run: cd ./target/
+      
     - name: Run with Maven
       run: java -jar HelloWorld-1.0-SNAPSHOT.jar
