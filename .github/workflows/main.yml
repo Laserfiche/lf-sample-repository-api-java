@@ -18,12 +18,8 @@ jobs:
       with:
         java-version: '18'
         distribution: 'temurin'
-        cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       
-    - name: Current directory  
-      run: cd target && echo "`ls -l` and `pwd`"
-      
-    - name: Run with Maven
+    - name: Run with Java
       run: cd target && java -cp HelloWorld-1.0-SNAPSHOT.jar HelloWorld
