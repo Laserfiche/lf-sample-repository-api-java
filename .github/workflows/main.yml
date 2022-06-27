@@ -26,4 +26,4 @@ jobs:
       run: cd target && echo "`ls -l` and `pwd`"
       
     - name: Run with Maven
-      run: cd target && java -jar HelloWorld-1.0-SNAPSHOT.jar
+      run: cd target && java -cp HelloWorld-1.0-SNAPSHOT.jar HelloWorld
