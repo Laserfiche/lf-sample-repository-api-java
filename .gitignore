@@ -10,6 +10,9 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# Environment variables file
+*.env
+
 # Package Files #
 *.jar
 *.war
@@ -23,3 +26,5 @@
 hs_err_pid*
 
 .idea/*
+
+target/*
