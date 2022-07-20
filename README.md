@@ -65,7 +65,7 @@ REPOSITORY_ID="<Repository ID from the 'Repository Administration' page>"
 mvn dependency:resolve
 mvn clean package
 cd target
-java -cp Sample-1.0-0.jar Sample
+java -cp lf-sample-repository-api-1.0-0.jar Sample
 ```
 
 These commands will install, compile, and execute this program which will print out the repository information in the
