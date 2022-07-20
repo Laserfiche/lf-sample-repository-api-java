@@ -22,4 +22,4 @@ jobs:
       run: mvn -B package --file pom.xml
       
     - name: Run with Java
-      run: cd target && java -cp HelloWorld-1.0-SNAPSHOT.jar HelloWorld
+      run: cd target && java -cp Sample-1.0-0.jar Sample
