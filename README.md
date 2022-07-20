@@ -3,17 +3,14 @@
 Sample maven service app that connects to a Laserfiche Cloud Repository using a service principal account.
 [Sample Code](./src/main/java/Sample.java)
 
-### Prerequisites
+## Prerequisites
 
-#### Software Prerequisites
+### Software Prerequisites
 
-- IntelliJ 2022.1.3+ or Eclipse
 - Apache Maven 3.8.5+
 - Java 8+
-- Git
-- Clone this repo on your local machine
 
-#### 1. Create a Service Principal
+### 1. Create a Service Principal
 
 - Log in to your account using Web Client as an administrator:
 
@@ -28,7 +25,7 @@ Sample maven service app that connects to a Laserfiche Cloud Repository using a 
 - View the created service principal and click on the 'Create Service Principal Key(s)' button
 - Save the Service Principal Key for later use
 
-#### 2. Create an OAuth Service App
+### 2. Create an OAuth Service App
 
 - Navigate to Laserfiche Developer Console:
     - [CA Cloud](https://app.laserfiche.ca/devconsole/)
@@ -40,7 +37,9 @@ Sample maven service app that connects to a Laserfiche Cloud Repository using a 
 - Click on the 'Authentication' Tab and create a new Access Key
 - Click the 'Download key as base-64 string' button for later use
 
-#### 3. Create a .env file
+### 3. Clone this repo on your local machine
+
+### 4. Create a .env file
 
 - Using the app picker, go to the 'Repository Administration' page and copy the Repository ID
 - In the root directory of this project, create a .env file containing the following lines:
@@ -61,7 +60,7 @@ REPOSITORY_ID="<Repository ID from the 'Repository Administration' page>"
 - Open with IntelliJ
 - On a terminal window, enter the following commands:
 
-```bash
+```maven
 mvn dependency:resolve
 mvn clean package
 cd target
