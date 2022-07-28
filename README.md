@@ -61,10 +61,8 @@ REPOSITORY_ID="<Repository ID from the 'Repository Administration' page>"
 - On a terminal window, enter the following commands:
 
 ```maven
-mvn dependency:resolve
-mvn clean package
-cd target
-java -cp lf-sample-repository-api-1.0-0.jar Sample
+mvn clean compile assembly:single
+java -jar target/lf-sample-repository-api-1.0-0-jar-with-dependencies.jar
 ```
 
 These commands will install, compile, and execute this program which will print out the repository information in the
