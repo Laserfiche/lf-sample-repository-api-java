@@ -14,13 +14,9 @@ public class Sample {
     private static RepositoryApiClient client = createRepoApiClient();
 
     public static void main(String[] args) {
-        try {
-            String repoName = getRepoName().join();
-            Entry rootFolder = getRootFolder().join();
-            List<Entry> rootFolderChildren = getFolderChildren(ROOTFOLDERENTRYID).join();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String repoName = getRepoName().join();
+        Entry rootFolder = getRootFolder().join();
+        List<Entry> rootFolderChildren = getFolderChildren(ROOTFOLDERENTRYID).join();
         System.exit(0);
     }
 
