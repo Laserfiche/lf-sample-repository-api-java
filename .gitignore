@@ -12,6 +12,7 @@
 
 # Environment variables file
 *.env
+.env
 
 # Package Files #
 *.jar

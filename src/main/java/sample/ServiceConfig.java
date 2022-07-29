@@ -32,15 +32,6 @@ public class ServiceConfig {
             repoId = dotenv.get("REPOSITORY_ID");
             spKey = dotenv.get("SERVICE_PRINCIPAL_KEY");
         }
-        String accessKeyStr = decodeBase64(accessKeyBase64);
-        accessKeyStr = accessKeyStr.replace("\\\"", "\"");
-
-        Gson gson = new GsonBuilder().registerTypeAdapter(JWK.class, new JwkDeserializer()).create();
-        accessKey = gson.fromJson(accessKeyStr, AccessKey.class);
-    }
-
-    private static String decodeBase64(String encoded) {
-        byte[] decodedBytes = Base64.getUrlDecoder().decode(encoded);
-        return new String(decodedBytes);
+        accessKey = AccessKey.CreateFromBase64EncodedAccessKey(accessKeyBase64);
     }
 }
