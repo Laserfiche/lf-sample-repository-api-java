@@ -34,10 +34,10 @@ public class Sample {
 
     public static CompletableFuture<Entry> getRootFolder() {
         CompletableFuture<Entry> entryResponse = client.getEntriesClient().getEntry(ServiceConfig.repoId, ROOTFOLDERENTRYID, null);
-        CompletableFuture<Entry> entry = entryResponse.supplyAsync(()->
-            entryResponse.join());
+        CompletableFuture<Entry> entry = entryResponse.supplyAsync(() ->
+                entryResponse.join());
         CompletableFuture<String> rootFolderName = entry.supplyAsync(() -> entry.join().getName());
-        rootFolderName.thenAcceptAsync(rootFolderNameAsync ->{
+        rootFolderName.thenAcceptAsync(rootFolderNameAsync -> {
             if (rootFolderNameAsync.length() == 0) {
                 rootFolderNameAsync = "/";
             }
