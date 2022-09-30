@@ -1,12 +1,7 @@
 package sample;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.laserfiche.api.client.model.AccessKey;
-import com.nimbusds.jose.jwk.JWK;
 import io.github.cdimascio.dotenv.Dotenv;
-
-import java.util.Base64;
 
 public class ServiceConfig {
     protected static String spKey;
