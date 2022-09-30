@@ -22,34 +22,40 @@ public class Sample {
 
     public static CompletableFuture<String> getRepoName() {
         CompletableFuture<List<RepositoryInfo>> repoListResponse = client.getRepositoryClient().getRepositoryList();
-        String repoName = repoListResponse.join().get(0).getRepoName();
-        String repoId = repoListResponse.join().get(0).getRepoId();
-        System.out.println("Repository Name: " + repoId);
-        repoListResponse.cancel(true);
-        return CompletableFuture.completedFuture(repoName);
+        CompletableFuture<String> repoName = repoListResponse.supplyAsync(() ->
+                repoListResponse.join().get(0).getRepoName());
+        CompletableFuture<String> repoId = repoListResponse.supplyAsync(() ->
+                repoListResponse.join().get(0).getRepoId());
+        repoId.thenAcceptAsync(repodIdAsync -> {
+            System.out.println("Repository Name: " + repodIdAsync);
+        });
+        return repoName;
     }
 
     public static CompletableFuture<Entry> getRootFolder() {
         CompletableFuture<Entry> entryResponse = client.getEntriesClient().getEntry(ServiceConfig.repoId, ROOTFOLDERENTRYID, null);
-        Entry entry = entryResponse.join();
-        String rootFolderName = entry.getName();
-        if (rootFolderName.length() == 0) {
-            rootFolderName = "/";
-        }
-        System.out.println("Root Folder Name: " + rootFolderName);
-        entryResponse.cancel(true);
-        return CompletableFuture.completedFuture(entry);
+        CompletableFuture<Entry> entry = entryResponse.supplyAsync(()->
+            entryResponse.join());
+        CompletableFuture<String> rootFolderName = entry.supplyAsync(() -> entry.join().getName());
+        rootFolderName.thenAcceptAsync(rootFolderNameAsync ->{
+            if (rootFolderNameAsync.length() == 0) {
+                rootFolderNameAsync = "/";
+            }
+            System.out.println("Root Folder Name: " + rootFolderNameAsync);
+        });
+        return entry;
     }
 
     public static CompletableFuture<List<Entry>> getFolderChildren(int folderEntryId) {
         CompletableFuture<ODataValueContextOfIListOfEntry> folderChildren = client.getEntriesClient().getEntryListing(ServiceConfig.repoId, folderEntryId, true, null, null, null, null, null, "name", null, null, null, null);
-        List<Entry> children = folderChildren.join().getValue();
-        int i = 0;
-        for (Entry child : children) {
-            System.out.println(i++ + ":[" + child.getEntryType() + " id:" + child.getId() + "] " + "'" + child.getName() + "'");
-        }
-        folderChildren.cancel(true);
-        return CompletableFuture.completedFuture(children);
+        CompletableFuture<List<Entry>> children = folderChildren.supplyAsync(() -> folderChildren.join().getValue());
+        children.thenAcceptAsync(childrenAsync -> {
+            int i = 0;
+            for (Entry child : childrenAsync) {
+                System.out.println(i++ + ":[" + child.getEntryType() + " id:" + child.getId() + "] " + "'" + child.getName() + "'");
+            }
+        });
+        return children;
     }
 
     public static RepositoryApiClient createRepoApiClient() {
