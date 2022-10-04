@@ -15,10 +15,7 @@ public class Sample {
 
     public static void main(String[] args) {
         client = createRepositoryApiClient();
-        String repositoryName = getRepositoryName().join();
-        Entry rootFolder = getRootFolder().join();
-        List<Entry> rootFolderChildren = getFolderChildren(ROOTFOLDERENTRYID).join();
-        System.exit(0);
+        CompletableFuture.allOf(getRepositoryName(), getRootFolder(), getFolderChildren(ROOTFOLDERENTRYID)).join();
     }
 
     public static CompletableFuture<String> getRepositoryName() {
@@ -50,7 +47,7 @@ public class Sample {
         children.thenAcceptAsync(childrenAsync -> {
             int i = 0;
             for (Entry child : childrenAsync) {
-                System.out.println(i++ + ":[" + child.getEntryType() + " id:" + child.getId() + "] " + "'" + child.getName() + "'");
+                System.out.printf("%s:[%s id:%d] '%s'%n", i++, child.getEntryType(), child.getId(), child.getName());
             }
         });
         return children;
