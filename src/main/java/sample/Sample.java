@@ -13,9 +13,11 @@ import java.util.concurrent.CompletableFuture;
 public class Sample {
     private static final int ROOT_FOLDER_ENTRY_ID = 1;
     private static RepositoryApiClient client;
+    private static ServiceConfig config;
 
     public static void main(String[] args) {
-        client = createRepositoryApiClient();
+        config = new ServiceConfig();
+        client = RepositoryApiClientImpl.CreateFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
         CompletableFuture
                 .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))
                 .join();
@@ -37,7 +39,7 @@ public class Sample {
     public static CompletableFuture<Entry> getRootFolder() {
         return client
                 .getEntriesClient()
-                .getEntry(ServiceConfig.repositoryId,
+                .getEntry(config.getRepositoryId(),
                         ROOT_FOLDER_ENTRY_ID, null)
                 .thenApply(rootEntry -> {
                     EntryType entryType = rootEntry.getEntryType();
@@ -52,7 +54,7 @@ public class Sample {
     public static CompletableFuture<List<Entry>> getFolderChildren(int folderId) {
         return client
                 .getEntriesClient()
-                .getEntryListing(ServiceConfig.repositoryId, folderId, true, null, null, null, null, null, "name",
+                .getEntryListing(config.getRepositoryId(), folderId, true, null, null, null, null, null, "name",
                         null, null, null)
                 .thenApply(entriesData -> {
                     List<Entry> entries = entriesData.getValue();
@@ -61,10 +63,5 @@ public class Sample {
                     }
                     return entries;
                 });
-    }
-
-    public static RepositoryApiClient createRepositoryApiClient() {
-        ServiceConfig.setUp();
-        return RepositoryApiClientImpl.CreateFromAccessKey(ServiceConfig.servicePrincipalKey, ServiceConfig.accessKey);
     }
 }
