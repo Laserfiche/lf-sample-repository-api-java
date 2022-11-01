@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class Sample {
-    private static final int ROOTFOLDERENTRYID = 1;
+    private static final int ROOT_FOLDER_ENTRY_ID = 1;
     private static RepositoryApiClient client;
 
     public static void main(String[] args) {
