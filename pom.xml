@@ -62,7 +62,7 @@
         <dependency>
             <groupId>com.laserfiche</groupId>
             <artifactId>lf-repository-api-client</artifactId>
-            <version>1.0.0-preview-2790109497-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 
