@@ -29,7 +29,7 @@ public class Sample {
                 .getRepositoryList()
                 .thenApply(repositories -> {
                     for (RepositoryInfo repository : repositories) {
-                        System.out.printf("Repository Name: %s\nRepository ID: %s\n\n", repository.getRepoName(),
+                        System.out.printf("Repository Name: %s%nRepository ID: %s%n%n", repository.getRepoName(),
                                 repository.getRepoId());
                     }
                     return repositories;
@@ -45,7 +45,7 @@ public class Sample {
                     EntryType entryType = rootEntry.getEntryType();
                     String creator = rootEntry.getCreator();
                     OffsetDateTime createdDate = rootEntry.getCreationTime();
-                    System.out.printf("Root folder information:\nType: %s\nCreator: %s\nCreation Date: %s\n", entryType,
+                    System.out.printf("Root folder information:%nType: %s%nCreator: %s%nCreation Date: %s%n", entryType,
                             creator, createdDate);
                     return rootEntry;
                 });
