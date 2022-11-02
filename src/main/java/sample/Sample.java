@@ -3,58 +3,65 @@ package sample;
 import com.laserfiche.repository.api.RepositoryApiClient;
 import com.laserfiche.repository.api.RepositoryApiClientImpl;
 import com.laserfiche.repository.api.clients.impl.model.Entry;
-import com.laserfiche.repository.api.clients.impl.model.ODataValueContextOfIListOfEntry;
+import com.laserfiche.repository.api.clients.impl.model.EntryType;
 import com.laserfiche.repository.api.clients.impl.model.RepositoryInfo;
+import org.threeten.bp.OffsetDateTime;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class Sample {
-    private static final int ROOTFOLDERENTRYID = 1;
+    private static final int ROOT_FOLDER_ENTRY_ID = 1;
     private static RepositoryApiClient client;
+    private static ServiceConfig config;
 
     public static void main(String[] args) {
-        client = createRepositoryApiClient();
-        CompletableFuture.allOf(getRepositoryName(), getRootFolder(), getFolderChildren(ROOTFOLDERENTRYID)).join();
+        config = new ServiceConfig();
+        client = RepositoryApiClientImpl.CreateFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
+        CompletableFuture
+                .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))
+                .join();
     }
 
-    public static CompletableFuture<String> getRepositoryName() {
-        CompletableFuture<List<RepositoryInfo>> repositoryListResponse = client.getRepositoryClient().getRepositoryList();
-        CompletableFuture<String> repositoryName = repositoryListResponse.thenApply(repositoryInfos -> repositoryInfos.get(0).getRepoName());
-        CompletableFuture<String> repositoryId = repositoryListResponse.thenApply(repositoryInfoList -> repositoryInfoList.get(0).getRepoId());
-        repositoryId.thenAccept(repositoryIdResult -> {
-            System.out.println("Repository Name: " + repositoryIdResult);
-        });
-        return repositoryName;
+    public static CompletableFuture<RepositoryInfo[]> getRepositoryInfo() {
+        return client
+                .getRepositoryClient()
+                .getRepositoryList()
+                .thenApply(repositoryInfoArray -> {
+                    for (RepositoryInfo repositoryInfo : repositoryInfoArray) {
+                        System.out.printf("Repository Name: %s%nRepository ID: %s%n%n", repositoryInfo.getRepoName(),
+                                repositoryInfo.getRepoId());
+                    }
+                    return repositoryInfoArray;
+                });
     }
 
     public static CompletableFuture<Entry> getRootFolder() {
-        CompletableFuture<Entry> entryResponse = client.getEntriesClient().getEntry(ServiceConfig.repositoryId, ROOTFOLDERENTRYID, null);
-        CompletableFuture<Entry> entry = entryResponse.thenApply(entryResponseInfo -> entryResponseInfo);
-        CompletableFuture<String> rootFolderName = entry.thenApply(entryName -> entryName.getName());
-        rootFolderName.thenAccept(rootFolderNameResult -> {
-            if (rootFolderNameResult.length() == 0) {
-                rootFolderNameResult = "/";
-            }
-            System.out.println("Root Folder Name: " + rootFolderNameResult);
-        });
-        return entry;
+        return client
+                .getEntriesClient()
+                .getEntry(config.getRepositoryId(),
+                        ROOT_FOLDER_ENTRY_ID, null)
+                .thenApply(rootEntry -> {
+                    EntryType entryType = rootEntry.getEntryType();
+                    String creator = rootEntry.getCreator();
+                    OffsetDateTime createdDate = rootEntry.getCreationTime();
+                    System.out.printf("Root folder information:%nType: %s%nCreator: %s%nCreation Date: %s%n", entryType,
+                            creator, createdDate);
+                    return rootEntry;
+                });
     }
 
-    public static CompletableFuture<List<Entry>> getFolderChildren(int folderEntryId) {
-        CompletableFuture<ODataValueContextOfIListOfEntry> folderChildren = client.getEntriesClient().getEntryListing(ServiceConfig.repositoryId, folderEntryId, true, null, null, null, null, null, "name", null, null, null, null);
-        CompletableFuture<List<Entry>> children = folderChildren.thenApply(folderChildrenInfo -> folderChildrenInfo.getValue());
-        children.thenAccept(childrenResult -> {
-            int i = 0;
-            for (Entry child : childrenResult) {
-                System.out.printf("%s:[%s id:%d] '%s'%n", i++, child.getEntryType(), child.getId(), child.getName());
-            }
-        });
-        return children;
-    }
-
-    public static RepositoryApiClient createRepositoryApiClient() {
-        ServiceConfig.setUp();
-        return RepositoryApiClientImpl.CreateFromAccessKey(ServiceConfig.servicePrincipalKey, ServiceConfig.accessKey);
+    public static CompletableFuture<List<Entry>> getFolderChildren(int folderId) {
+        return client
+                .getEntriesClient()
+                .getEntryListing(config.getRepositoryId(), folderId, true, null, null, null, null, null, "name",
+                        null, null, null)
+                .thenApply(entriesData -> {
+                    List<Entry> entries = entriesData.getValue();
+                    for (Entry entry : entries) {
+                        System.out.printf("[%s id: %d] '%s'%n", entry.getEntryType(), entry.getId(), entry.getName());
+                    }
+                    return entries;
+                });
     }
 }
