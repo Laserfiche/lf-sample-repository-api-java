@@ -27,12 +27,12 @@ public class Sample {
         return client
                 .getRepositoryClient()
                 .getRepositoryList()
-                .thenApply(repositories -> {
-                    for (RepositoryInfo repositoryInfo : repositories) {
+                .thenApply(repositoryInfoArray -> {
+                    for (RepositoryInfo repositoryInfo : repositoryInfoArray) {
                         System.out.printf("Repository Name: %s%nRepository ID: %s%n%n", repositoryInfo.getRepoName(),
                                 repositoryInfo.getRepoId());
                     }
-                    return repositories;
+                    return repositoryInfoArray;
                 });
     }
 
