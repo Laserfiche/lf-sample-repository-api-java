@@ -28,9 +28,9 @@ public class Sample {
                 .getRepositoryClient()
                 .getRepositoryList()
                 .thenApply(repositories -> {
-                    for (RepositoryInfo repository : repositories) {
-                        System.out.printf("Repository Name: %s%nRepository ID: %s%n%n", repository.getRepoName(),
-                                repository.getRepoId());
+                    for (RepositoryInfo repositoryInfo : repositories) {
+                        System.out.printf("Repository Name: %s%nRepository ID: %s%n%n", repositoryInfo.getRepoName(),
+                                repositoryInfo.getRepoId());
                     }
                     return repositories;
                 });
