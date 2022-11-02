@@ -59,7 +59,7 @@ public class Sample {
                 .thenApply(entriesData -> {
                     List<Entry> entries = entriesData.getValue();
                     for (Entry entry : entries) {
-                        System.out.printf("[%s id:%d] '%s'%n", entry.getEntryType(), entry.getId(), entry.getName());
+                        System.out.printf("[%s id: %d] '%s'%n", entry.getEntryType(), entry.getId(), entry.getName());
                     }
                     return entries;
                 });
