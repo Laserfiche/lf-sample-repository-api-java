@@ -47,7 +47,7 @@ public class ServiceConfig {
         username = System.getenv("APISERVER_USERNAME");
         password = System.getenv("APISERVER_PASSWORD");
         baseUrl = System.getenv("APISERVER_REPOSITORY_API_BASE_URL");
-        if (authorizationType == null) {
+        if (authorizationType == null && repositoryId == null) {
             Dotenv dotenv = Dotenv
                     .configure()
                     .filename(".env")
