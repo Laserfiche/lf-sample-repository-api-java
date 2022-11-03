@@ -17,13 +17,13 @@ public class Sample {
 
     public static void main(String[] args) {
         config = new ServiceConfig();
-        if (config.getAuthorizationType().equalsIgnoreCase("CloudAccessKey")) {
-            client = RepositoryApiClientImpl.CreateFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
+        //if (config.getAuthorizationType().equalsIgnoreCase("CloudAccessKey")) {
+        client = RepositoryApiClientImpl.CreateFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
 //        } else if (config.getAuthorizationType().equalsIgnoreCase("APIServerUsernamePassword")) {
 //            client = RepositoryApiClientImpl.CreateFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
-        } else {
-            System.out.println("Invalid value for 'AUTHORIZATION_TYPE'. It can only be 'CloudAccessKey' or 'APIServerUsernamePassword'.");
-        }
+//        } else {
+//            System.out.println("Invalid value for 'AUTHORIZATION_TYPE'. It can only be 'CloudAccessKey' or 'APIServerUsernamePassword'.");
+//        }
         CompletableFuture
                 .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))
                 .join();
