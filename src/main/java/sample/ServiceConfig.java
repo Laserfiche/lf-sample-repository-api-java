@@ -73,7 +73,7 @@ public class ServiceConfig {
                     }
                     if (accessKeyBase64 == null) {
                         accessKeyBase64 = dotenv.get("ACCESS_KEY");
-//                        accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
+                        accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
                         if (accessKeyBase64 == null) {
                             throw new IllegalStateException("Environment variable ACCESS_KEY does not exist.");
                         }
@@ -102,6 +102,6 @@ public class ServiceConfig {
                 }
             }
         }
-        accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
+        //accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
     }
 }
