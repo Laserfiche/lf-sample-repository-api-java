@@ -108,6 +108,6 @@ public class ServiceConfig {
                 }
             }
         }
-        //accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
+        accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
     }
 }
