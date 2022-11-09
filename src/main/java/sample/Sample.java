@@ -17,12 +17,12 @@ public class Sample {
 
     public static void main(String[] args) {
         config = new ServiceConfig();
-        if (config.getAuthorizationType().equalsIgnoreCase(AuthorizationType.CLOUD_ACCESS_KEY.name())) {
+        if (config.getAuthorizationType() == AuthorizationType.CLOUD_ACCESS_KEY) {
             client = RepositoryApiClientImpl.createFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
-        } else if (config.getAuthorizationType().equalsIgnoreCase(AuthorizationType.API_SERVER_USERNAME_PASSWORD.name())) {
+        } else if (config.getAuthorizationType() == AuthorizationType.API_SERVER_USERNAME_PASSWORD) {
             client = RepositoryApiClientImpl.createFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
         } else {
-            throw new IllegalStateException("Invalid value for 'AUTHORIZATION_TYPE'. It can only be 'CloudAccessKey' or 'APIServerUsernamePassword'.");
+            throw new IllegalStateException("Environment variable '"+ config.AUTHORIZATION_TYPE + "' does not exist. It must be present and its value can only be '" + AuthorizationType.CLOUD_ACCESS_KEY + "' or '" + AuthorizationType.API_SERVER_USERNAME_PASSWORD + "'.");
         }
         CompletableFuture
                 .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))
