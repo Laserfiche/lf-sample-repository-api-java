@@ -3,6 +3,11 @@ package sample;
 import com.laserfiche.api.client.model.AccessKey;
 import io.github.cdimascio.dotenv.Dotenv;
 
+enum AuthorizationType {
+    CLOUD_ACCESS_KEY,
+    API_SERVER_USERNAME_PASSWORD
+}
+
 public class ServiceConfig {
     private String servicePrincipalKey;
     private AccessKey accessKey;
@@ -61,7 +66,7 @@ public class ServiceConfig {
                     throw new IllegalStateException("Environment variable REPOSITORY_ID does not exist.");
                 }
             }
-            if (authorizationType.equalsIgnoreCase("CloudAccessKey")) {
+            if (authorizationType.equalsIgnoreCase(AuthorizationType.CLOUD_ACCESS_KEY.name())) {
                 if (servicePrincipalKey == null || accessKeyBase64 == null) {
                     // Try load from file
                     if (servicePrincipalKey == null) {
@@ -78,7 +83,7 @@ public class ServiceConfig {
                         }
                     }
                 }
-            } else if (authorizationType.equalsIgnoreCase("APIServerUsernamePassword")) {
+            } else if (authorizationType.equalsIgnoreCase(AuthorizationType.API_SERVER_USERNAME_PASSWORD.name())) {
                 if (username == null || password == null || baseUrl == null) {
                     if (username == null) {
                         username = dotenv.get("APISERVER_USERNAME");
@@ -100,13 +105,13 @@ public class ServiceConfig {
                     }
                 }
             }
-        } else if (authorizationType.equalsIgnoreCase("CloudAccessKey")) {
+        } else if (authorizationType.equalsIgnoreCase(AuthorizationType.CLOUD_ACCESS_KEY.name())) {
             servicePrincipalKey = System.getenv("SERVICE_PRINCIPAL_KEY");
             if (accessKeyBase64 == null){
-                throw new IllegalStateException("Cannot continue due to missing access key.");
+                throw new IllegalStateException("Environment variable ACCESS_KEY does not exist.");
             }
             accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
-        } else if (authorizationType.equalsIgnoreCase("APIServerUsernamePassword")) {
+        } else if (authorizationType.equalsIgnoreCase(AuthorizationType.API_SERVER_USERNAME_PASSWORD.name())) {
             username = System.getenv("APISERVER_USERNAME");
             password = System.getenv("APISERVER_PASSWORD");
             baseUrl = System.getenv("APISERVER_REPOSITORY_API_BASE_URL");

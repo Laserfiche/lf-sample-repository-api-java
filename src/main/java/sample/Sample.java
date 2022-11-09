@@ -17,9 +17,9 @@ public class Sample {
 
     public static void main(String[] args) {
         config = new ServiceConfig();
-        if (config.getAuthorizationType().equalsIgnoreCase("CloudAccessKey")) {
+        if (config.getAuthorizationType().equalsIgnoreCase(AuthorizationType.CLOUD_ACCESS_KEY.name())) {
             client = RepositoryApiClientImpl.createFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
-        } else if (config.getAuthorizationType().equalsIgnoreCase("APIServerUsernamePassword")) {
+        } else if (config.getAuthorizationType().equalsIgnoreCase(AuthorizationType.API_SERVER_USERNAME_PASSWORD.name())) {
             client = RepositoryApiClientImpl.createFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
         } else {
             System.out.println("Invalid value for 'AUTHORIZATION_TYPE'. It can only be 'CloudAccessKey' or 'APIServerUsernamePassword'.");
