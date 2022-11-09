@@ -22,7 +22,7 @@ public class Sample {
         } else if (config.getAuthorizationType().equalsIgnoreCase(AuthorizationType.API_SERVER_USERNAME_PASSWORD.name())) {
             client = RepositoryApiClientImpl.createFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
         } else {
-            System.out.println("Invalid value for 'AUTHORIZATION_TYPE'. It can only be 'CloudAccessKey' or 'APIServerUsernamePassword'.");
+            throw new IllegalStateException("Invalid value for 'AUTHORIZATION_TYPE'. It can only be 'CloudAccessKey' or 'APIServerUsernamePassword'.");
         }
         CompletableFuture
                 .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))

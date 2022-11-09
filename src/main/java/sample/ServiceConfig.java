@@ -17,7 +17,6 @@ public class ServiceConfig {
     private String baseUrl;
     private String authorizationType;
 
-
     public String getServicePrincipalKey() {
         return servicePrincipalKey;
     }
@@ -52,6 +51,7 @@ public class ServiceConfig {
         String accessKeyBase64 = System.getenv("ACCESS_KEY");
         repositoryId = System.getenv("REPOSITORY_ID");
         if (authorizationType == null && repositoryId == null) {
+            // Try load from file
             Dotenv dotenv = Dotenv
                     .configure()
                     .filename(".env")
@@ -68,7 +68,6 @@ public class ServiceConfig {
             }
             if (authorizationType.equalsIgnoreCase(AuthorizationType.CLOUD_ACCESS_KEY.name())) {
                 if (servicePrincipalKey == null || accessKeyBase64 == null) {
-                    // Try load from file
                     if (servicePrincipalKey == null) {
                         servicePrincipalKey = dotenv.get("SERVICE_PRINCIPAL_KEY");
                         if (servicePrincipalKey == null) {
@@ -107,7 +106,7 @@ public class ServiceConfig {
             }
         } else if (authorizationType.equalsIgnoreCase(AuthorizationType.CLOUD_ACCESS_KEY.name())) {
             servicePrincipalKey = System.getenv("SERVICE_PRINCIPAL_KEY");
-            if (accessKeyBase64 == null){
+            if (accessKeyBase64 == null) {
                 throw new IllegalStateException("Environment variable ACCESS_KEY does not exist.");
             }
             accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
