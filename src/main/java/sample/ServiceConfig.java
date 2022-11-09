@@ -43,16 +43,9 @@ public class ServiceConfig {
 
     public ServiceConfig() {
         // Try load from environment variable
-        servicePrincipalKey = System.getenv("SERVICE_PRINCIPAL_KEY");
+        authorizationType = System.getenv("AUTHORIZATION_TYPE");
         String accessKeyBase64 = System.getenv("ACCESS_KEY");
         repositoryId = System.getenv("REPOSITORY_ID");
-        authorizationType = System.getenv("AUTHORIZATION_TYPE");
-        username = System.getenv("APISERVER_USERNAME");
-        password = System.getenv("APISERVER_PASSWORD");
-        baseUrl = System.getenv("APISERVER_REPOSITORY_API_BASE_URL");
-        System.out.println(authorizationType);
-        System.out.println(repositoryId);
-        System.out.println(System.getenv());
         if (authorizationType == null && repositoryId == null) {
             Dotenv dotenv = Dotenv
                     .configure()
@@ -107,7 +100,16 @@ public class ServiceConfig {
                     }
                 }
             }
+        } else if (authorizationType.equalsIgnoreCase("CloudAccessKey")) {
+            servicePrincipalKey = System.getenv("SERVICE_PRINCIPAL_KEY");
+            if (accessKeyBase64 == null){
+                throw new IllegalStateException("Cannot continue due to missing access key.");
+            }
+            accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
+        } else if (authorizationType.equalsIgnoreCase("APIServerUsernamePassword")) {
+            username = System.getenv("APISERVER_USERNAME");
+            password = System.getenv("APISERVER_PASSWORD");
+            baseUrl = System.getenv("APISERVER_REPOSITORY_API_BASE_URL");
         }
-        accessKey = AccessKey.createFromBase64EncodedAccessKey(accessKeyBase64);
     }
 }
