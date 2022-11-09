@@ -36,7 +36,10 @@ public class ServiceConfig {
     public String getBaseUrl() {
         return baseUrl;
     }
-    public String getAuthorizationType(){ return authorizationType; }
+
+    public String getAuthorizationType() {
+        return authorizationType;
+    }
 
     public ServiceConfig() {
         // Try load from environment variable
