@@ -17,10 +17,15 @@ public class Sample {
 
     public static void main(String[] args) {
         config = new ServiceConfig();
-        client = RepositoryApiClientImpl.CreateFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
+        if (AuthorizationType.CLOUD_ACCESS_KEY.name().equalsIgnoreCase(config.getAuthorizationType().toString())) {
+            client = RepositoryApiClientImpl.createFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
+        } else {
+            client = RepositoryApiClientImpl.createFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
+        }
         CompletableFuture
                 .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))
                 .join();
+        System.exit(0);
     }
 
     public static CompletableFuture<RepositoryInfo[]> getRepositoryInfo() {

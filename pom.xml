@@ -61,8 +61,13 @@
     <dependencies>
         <dependency>
             <groupId>com.laserfiche</groupId>
-            <artifactId>lf-repository-api-client</artifactId>
+            <artifactId>lf-api-client-core</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.laserfiche</groupId>
+            <artifactId>lf-repository-api-client</artifactId>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 

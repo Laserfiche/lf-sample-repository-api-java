@@ -44,7 +44,9 @@ Sample maven service app that connects to a Laserfiche Cloud Repository using a 
 - Using the app picker, go to the 'Repository Administration' page and copy the Repository ID
 - In the root directory of this project, create a .env file containing the following lines:
 
-```bash
+```
+AUTHORIZATION_TYPE="CLOUD_ACCESS_KEY" 
+
 SERVICE_PRINCIPAL_KEY="<Service Principal Key created from step 1>"
 
 ACCESS_KEY="<base-64 Access Key string created from step 2>"
