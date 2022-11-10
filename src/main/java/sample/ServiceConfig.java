@@ -56,8 +56,8 @@ public class ServiceConfig {
                 .load();
         try {
             authorizationType = AuthorizationType.valueOf(getEnvironmentVariable(AUTHORIZATION_TYPE));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalStateException("Environment variable '" + AUTHORIZATION_TYPE + "' does not exist. It must be present and its value can only be '" + AuthorizationType.CLOUD_ACCESS_KEY + "' or '" + AuthorizationType.API_SERVER_USERNAME_PASSWORD + "'.");
+        } catch (EnumConstantNotPresentException e) {
+            throw new EnumConstantNotPresentException(AuthorizationType.class, getEnvironmentVariable(AUTHORIZATION_TYPE));
         }
         repositoryId = getEnvironmentVariable(REPOSITORY_ID);
         if (authorizationType == AuthorizationType.CLOUD_ACCESS_KEY) {

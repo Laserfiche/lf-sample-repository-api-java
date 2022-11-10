@@ -19,10 +19,8 @@ public class Sample {
         config = new ServiceConfig();
         if (config.getAuthorizationType() == AuthorizationType.CLOUD_ACCESS_KEY) {
             client = RepositoryApiClientImpl.createFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
-        } else if (config.getAuthorizationType() == AuthorizationType.API_SERVER_USERNAME_PASSWORD) {
-            client = RepositoryApiClientImpl.createFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
         } else {
-            throw new IllegalStateException("Environment variable '"+ config.AUTHORIZATION_TYPE + "' does not exist. It must be present and its value can only be '" + AuthorizationType.CLOUD_ACCESS_KEY + "' or '" + AuthorizationType.API_SERVER_USERNAME_PASSWORD + "'.");
+            client = RepositoryApiClientImpl.createFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
         }
         CompletableFuture
                 .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))
