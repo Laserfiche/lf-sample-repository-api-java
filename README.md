@@ -40,7 +40,7 @@ Sample maven service app that connects to a Laserfiche Cloud Repository using a 
 ### 3. Clone this repo on your local machine
 
 ### 4. Create a .env file
-
+#### If running this sample project against Cloud 
 - Using the app picker, go to the 'Repository Administration' page and copy the Repository ID
 - In the root directory of this project, create a .env file containing the following lines:
 
@@ -53,7 +53,20 @@ ACCESS_KEY="<base-64 Access Key string created from step 2>"
 
 REPOSITORY_ID="<Repository ID from the 'Repository Administration' page>"
 ```
+#### If running this sample project against Self-Hosted
+- In the root directory of this project, create a .env file containing the following lines:
 
+```
+AUTHORIZATION_TYPE="API_SERVER_USERNAME_PASSWORD" 
+
+REPOSITORY_ID="<Repository Name>"
+
+APISERVER_USERNAME="<Username>"
+
+APISERVER_PASSWORD="<Password>"
+
+APISERVER_REPOSITORY_API_BASE_URL="<APIserver Host Name>"
+```
 - Note: The .env file is used in local development environment to set operating system environment variables. DO NOT
   check-in the .env file in Git
 
@@ -70,5 +83,5 @@ java -jar target/lf-sample-repository-api-1.0-0-jar-with-dependencies.jar
 These commands will install, compile, and execute this program which will print out the repository information in the
 output window.
 Note: This project uses the [@laserfiche/lf-repository-api-client
-Maven Central package](insert link here).
+Maven Central package](https://central.sonatype.dev/artifact/com.laserfiche/lf-repository-api-client/1.1.1).
 See [Laserfiche Repository API Documentation](https://developer.laserfiche.com/libraries.html).
