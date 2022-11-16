@@ -10,6 +10,16 @@ Sample maven service app that connects to a Laserfiche Cloud Repository using a 
 - Apache Maven 3.8.5+
 - Java 8+
 
+### Cloud Prerequisites
+
+- CA, EU, or US Cloud Web Client Account
+
+### Self Hosted Prerequisites
+
+- Set up Self Hosted Api Server 1.0.0.40+
+
+**Note:** If you are running the sample project against a self hosted api server, then skip to **[step 3](#3-clone-this-repo-on-your-local-machine)**
+
 ### 1. Create a Service Principal
 
 - Log in to your account using Web Client as an administrator:
@@ -65,7 +75,7 @@ APISERVER_USERNAME="<Username>"
 
 APISERVER_PASSWORD="<Password>"
 
-APISERVER_REPOSITORY_API_BASE_URL="<APIserver Host Name>"
+APISERVER_REPOSITORY_API_BASE_URL="<Api Server Host Name>"
 ```
 - Note: The .env file is used in local development environment to set operating system environment variables. DO NOT
   check-in the .env file in Git
