@@ -1,6 +1,6 @@
 # lf-sample-repository-api-java
 
-Sample maven service app that connects to a Laserfiche Cloud Repository using a service principal account or Self-Hosted Repository.
+Sample maven service app that connects to a Laserfiche Cloud Repository or Self-Hosted Repository.
 [Sample Code](./src/main/java/sample/Sample.java)
 
 ## Cloud Prerequisites
