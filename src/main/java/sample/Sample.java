@@ -25,7 +25,7 @@ public class Sample {
         CompletableFuture
                 .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))
                 .join();
-        System.exit(0);
+        client.close();
     }
 
     public static CompletableFuture<RepositoryInfo[]> getRepositoryInfo() {
