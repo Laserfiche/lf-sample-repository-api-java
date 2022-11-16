@@ -12,13 +12,13 @@ Sample maven service app that connects to a Laserfiche Cloud Repository using a 
 
 ### Cloud Prerequisites
 
-- CA, EU, or US Cloud Web Client Account
+- CA, EU, or US Cloud Web Client account
 
 ### Self Hosted Prerequisites
 
-- Set up Self Hosted Api Server 1.0.0.40+
+- Set up Self Hosted API Server 1.0.0.40+
 
-**Note:** If you are running the sample project against a self hosted api server, then skip to **[step 3](#3-clone-this-repo-on-your-local-machine)**
+**Note:** If you are running the sample project against a self hosted API server, then skip to **[step 3](#3-clone-this-repo-on-your-local-machine)**
 
 ### 1. Create a Service Principal
 
@@ -50,10 +50,11 @@ Sample maven service app that connects to a Laserfiche Cloud Repository using a 
 ### 3. Clone this repo on your local machine
 
 ### 4. Create a .env file
+
 #### If running this sample project against Cloud 
+
 - Using the app picker, go to the 'Repository Administration' page and copy the Repository ID
 - In the root directory of this project, create a .env file containing the following lines:
-
 ```
 AUTHORIZATION_TYPE="CLOUD_ACCESS_KEY" 
 
@@ -63,7 +64,9 @@ ACCESS_KEY="<base-64 Access Key string created from step 2>"
 
 REPOSITORY_ID="<Repository ID from the 'Repository Administration' page>"
 ```
+
 #### If running this sample project against Self-Hosted
+
 - In the root directory of this project, create a .env file containing the following lines:
 
 ```
@@ -75,15 +78,15 @@ APISERVER_USERNAME="<Username>"
 
 APISERVER_PASSWORD="<Password>"
 
-APISERVER_REPOSITORY_API_BASE_URL="<Api Server Host Name>"
+APISERVER_REPOSITORY_API_BASE_URL="<API Server Host Name>"
 ```
 - Note: The .env file is used in local development environment to set operating system environment variables. DO NOT
   check-in the .env file in Git
 
 ## Build and Run this App
 
-- Open with IntelliJ
-- On a terminal window, enter the following commands:
+- Open a terminal window
+- Enter the following commands:
 
 ```maven
 mvn clean compile assembly:single
