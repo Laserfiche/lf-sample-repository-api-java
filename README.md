@@ -36,7 +36,9 @@ Sample maven service app that connects to a Laserfiche Cloud or Self-Hosted Repo
 - Select the 'Service' option, enter a name, and click the 'Create application' button
 - Select the app service account to be the one created on step 1 and click the 'Save changes' button
 - Click on the 'Authentication' Tab and create a new Access Key
+- Select the first option (i.e. Create a public 'Access Key'...)
 - Click the 'Download key as base-64 string' button for later use
+- Click OK
 
 ### 3. Clone this repo on your local machine
 
@@ -97,5 +99,5 @@ java -jar target/lf-sample-repository-api-1.0-0-jar-with-dependencies.jar
 These commands will install, compile, and execute this program which will print out the repository information in the
 output window.
 Note: This project uses the [@laserfiche/lf-repository-api-client
-Maven Central package](https://central.sonatype.dev/artifact/com.laserfiche/lf-repository-api-client/1.1.1).
+Maven Central package](https://s01.oss.sonatype.org/content/repositories/snapshots/com/laserfiche/lf-repository-api-client/2.0.0-preview-4406822515-SNAPSHOT/).
 See [Laserfiche Repository API Documentation](https://developer.laserfiche.com/libraries.html).
