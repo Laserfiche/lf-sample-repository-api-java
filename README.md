@@ -93,7 +93,7 @@ APISERVER_REPOSITORY_API_BASE_URL="<API Server Base Url (ex: https://example.com
 
 ```maven
 mvn clean compile assembly:single
-java -jar target/lf-sample-repository-api-1.0-0-jar-with-dependencies.jar
+java -jar target/lf-sample-repository-api-1.0.0-jar-with-dependencies.jar
 ```
 
 These commands will install, compile, and execute this program which will print out the repository information in the

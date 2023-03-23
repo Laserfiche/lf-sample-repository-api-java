@@ -40,12 +40,11 @@ public class Sample {
     }
 
     public static Entry getRootFolder() {
-        Entry rootEntry = client.getEntriesClient().getEntry(new ParametersForGetEntry().setRepoId(config.getRepositoryId()).setEntryId(ROOT_FOLDER_ENTRY_ID).setSelect(null));
+        Entry rootEntry = client.getEntriesClient().getEntry(new ParametersForGetEntry().setRepoId(config.getRepositoryId()).setEntryId(ROOT_FOLDER_ENTRY_ID));
         EntryType entryType = rootEntry.getEntryType();
-        String creator = rootEntry.getCreator();
         OffsetDateTime createdDate = rootEntry.getCreationTime();
-        System.out.printf("Root folder information:%nType: %s%nCreator: %s%nCreation Date: %s%n", entryType,
-                creator, createdDate);
+        System.out.printf("Root folder information:%nType: %s%nCreation Date: %s%n", entryType,
+                createdDate);
         return rootEntry;
     }
 
