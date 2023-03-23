@@ -4,11 +4,13 @@ import com.laserfiche.repository.api.RepositoryApiClient;
 import com.laserfiche.repository.api.RepositoryApiClientImpl;
 import com.laserfiche.repository.api.clients.impl.model.Entry;
 import com.laserfiche.repository.api.clients.impl.model.EntryType;
+import com.laserfiche.repository.api.clients.impl.model.ODataValueContextOfIListOfEntry;
 import com.laserfiche.repository.api.clients.impl.model.RepositoryInfo;
+import com.laserfiche.repository.api.clients.params.ParametersForGetEntry;
+import com.laserfiche.repository.api.clients.params.ParametersForGetEntryListing;
 import org.threeten.bp.OffsetDateTime;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class Sample {
     private static final int ROOT_FOLDER_ENTRY_ID = 1;
@@ -22,51 +24,36 @@ public class Sample {
         } else {
             client = RepositoryApiClientImpl.createFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
         }
-        CompletableFuture
-                .allOf(getRepositoryInfo(), getRootFolder(), getFolderChildren(ROOT_FOLDER_ENTRY_ID))
-                .join();
+        RepositoryInfo[] repositoryNames = getRepositoryInfo();
+        Entry rootFolder = getRootFolder();
+        List<Entry> folderChildren = getFolderChildren(ROOT_FOLDER_ENTRY_ID);
         client.close();
     }
 
-    public static CompletableFuture<RepositoryInfo[]> getRepositoryInfo() {
-        return client
-                .getRepositoryClient()
-                .getRepositoryList()
-                .thenApply(repositoryInfoArray -> {
-                    for (RepositoryInfo repositoryInfo : repositoryInfoArray) {
-                        System.out.printf("Repository Name: %s%nRepository ID: %s%n%n", repositoryInfo.getRepoName(),
-                                repositoryInfo.getRepoId());
-                    }
-                    return repositoryInfoArray;
-                });
+    public static RepositoryInfo[] getRepositoryInfo() {
+        RepositoryInfo[] repositoryInfoArray = client.getRepositoryClient().getRepositoryList();
+        for (RepositoryInfo repositoryInfo : repositoryInfoArray) {
+            System.out.printf("Repository Name: %s%nRepository ID: %s%n%n", repositoryInfo.getRepoName(),
+                    repositoryInfo.getRepoId());
+        }
+        return repositoryInfoArray;
     }
 
-    public static CompletableFuture<Entry> getRootFolder() {
-        return client
-                .getEntriesClient()
-                .getEntry(config.getRepositoryId(),
-                        ROOT_FOLDER_ENTRY_ID, null)
-                .thenApply(rootEntry -> {
-                    EntryType entryType = rootEntry.getEntryType();
-                    String creator = rootEntry.getCreator();
-                    OffsetDateTime createdDate = rootEntry.getCreationTime();
-                    System.out.printf("Root folder information:%nType: %s%nCreator: %s%nCreation Date: %s%n", entryType,
-                            creator, createdDate);
-                    return rootEntry;
-                });
+    public static Entry getRootFolder() {
+        Entry rootEntry = client.getEntriesClient().getEntry(new ParametersForGetEntry().setRepoId(config.getRepositoryId()).setEntryId(ROOT_FOLDER_ENTRY_ID));
+        EntryType entryType = rootEntry.getEntryType();
+        OffsetDateTime createdDate = rootEntry.getCreationTime();
+        System.out.printf("Root folder information:%nType: %s%nCreation Date: %s%n", entryType,
+                createdDate);
+        return rootEntry;
     }
 
-    public static CompletableFuture<List<Entry>> getFolderChildren(int folderId) {
-        return client
-                .getEntriesClient()
-                .getEntryListing(config.getRepositoryId(), folderId, true, null, null, null, null, null, "name",
-                        null, null, null)
-                .thenApply(entriesData -> {
-                    List<Entry> entries = entriesData.getValue();
-                    for (Entry entry : entries) {
-                        System.out.printf("[%s id: %d] '%s'%n", entry.getEntryType(), entry.getId(), entry.getName());
-                    }
-                    return entries;
-                });
+    public static List<Entry> getFolderChildren(int folderId) {
+        ODataValueContextOfIListOfEntry entriesData = client.getEntriesClient().getEntryListing(new ParametersForGetEntryListing().setRepoId(config.getRepositoryId()).setEntryId(folderId).setGroupByEntryType(true).setOrderby("name"));
+        List<Entry> entries = entriesData.getValue();
+        for (Entry entry : entries) {
+            System.out.printf("[%s id: %d] '%s'%n", entry.getEntryType(), entry.getId(), entry.getName());
+        }
+        return entries;
     }
 }
