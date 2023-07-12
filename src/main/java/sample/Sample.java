@@ -29,14 +29,14 @@ public class Sample {
         } else {
             client = createSelfHostedRepositoryApiClient();
         }
-        RepositoryInfo[] repositoryNames = getRepositoryInfo(); //Print repository name
-        Entry rootFolder = getRootFolder(ROOT_FOLDER_ENTRY_ID); //Print root folder name
-        List<Entry> folderChildren = getFolderChildren(ROOT_FOLDER_ENTRY_ID); //Print root folder children
-        Entry createFolder = createFolder(); //Creates a sample project folder
-        importDocument(tempSampleProjectFolderId, sampleProjectEdocName); //Imports a document inside the sample project folder
+        RepositoryInfo[] repositoryNames = getRepositoryInfo(); // Print repository name
+        Entry rootFolder = getRootFolder(ROOT_FOLDER_ENTRY_ID); // Print root folder name
+        List<Entry> folderChildren = getFolderChildren(ROOT_FOLDER_ENTRY_ID); // Print root folder children
+        Entry createFolder = createFolder(); // Creates a sample project folder
+        importDocument(tempSampleProjectFolderId, sampleProjectEdocName); // Imports a document inside the sample project folder
         setEntryFields(); // Set Entry Fields
-        Entry sampleProjectRootFolder = getRootFolder(tempSampleProjectFolderId); //Print root folder name
-        List<Entry> sampleProjectRootFolderChildren = getFolderChildren(tempSampleProjectFolderId); //Print root folder children
+        Entry sampleProjectRootFolder = getRootFolder(tempSampleProjectFolderId); // Print root folder name
+        List<Entry> sampleProjectRootFolderChildren = getFolderChildren(tempSampleProjectFolderId); // Print root folder children
         ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(); // Print entry Fields
         Map<String, String> entryContentType = getEntryContentType(); // Print Edoc Information
         searchForImportedDocument(sampleProjectEdocName); // Search for the imported document inside the sample project folder
