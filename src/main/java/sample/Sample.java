@@ -40,7 +40,7 @@ public class Sample {
         ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(); // Print entry Fields
         Map<String, String> entryContentType = getEntryContentType(); // Print Edoc Information
         searchForImportedDocument(sampleProjectEdocName); // Search for the imported document inside the sample project folder
-        deleteSampleProjectFolder();
+        deleteSampleProjectFolder(); // Deletes sample project folder and its contents inside it
         client.close();
     }
 
@@ -150,7 +150,8 @@ public class Sample {
     public static Map<String, String> getEntryContentType() {
         final Map<String, String> documentContentTypeResponse = client.getEntriesClient().getDocumentContentType(
                 new ParametersForGetDocumentContentType().setRepoId(config.getRepositoryId()).setEntryId(tempEdocEntryId));
-        System.out.println("Electronic Document Content:" + documentContentTypeResponse.toString());
+        System.out.println("Electronic Document Content Type:" + documentContentTypeResponse.get("Content-Type"));
+        System.out.println("Electronic Document Content Length:" + documentContentTypeResponse.get("Content-Length"));
         return documentContentTypeResponse;
     }
 
