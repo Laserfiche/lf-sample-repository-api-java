@@ -17,7 +17,6 @@ public class Sample {
     private static final int ROOT_FOLDER_ENTRY_ID = 1;
     private static int tempSampleProjectFolderId = 0;
     private static int tempEntryFieldId = 0;
-    private static int tempEdocEntryId = 0;
     private static String sampleProjectEdocName = "Java Sample Project GetDocumentContent";
     private static RepositoryApiClient client;
     private static ServiceConfig config;
@@ -33,12 +32,12 @@ public class Sample {
         Entry rootFolder = getRootFolder(ROOT_FOLDER_ENTRY_ID); // Print root folder name
         List<Entry> folderChildren = getFolderChildren(ROOT_FOLDER_ENTRY_ID); // Print root folder children
         Entry createFolder = createFolder(); // Creates a sample project folder
-        importDocument(tempSampleProjectFolderId, sampleProjectEdocName); // Imports a document inside the sample project folder
+        int tempEdocEntryId = importDocument(tempSampleProjectFolderId, sampleProjectEdocName); // Imports a document inside the sample project folder
         setEntryFields(); // Set Entry Fields
         Entry sampleProjectRootFolder = getRootFolder(tempSampleProjectFolderId); // Print root folder name
         List<Entry> sampleProjectRootFolderChildren = getFolderChildren(tempSampleProjectFolderId); // Print root folder children
         ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(); // Print entry Fields
-        Map<String, String> entryContentType = getEntryContentType(); // Print Edoc Information
+        Map<String, String> entryContentType = getEntryContentType(tempEdocEntryId); // Print Edoc Information
         searchForImportedDocument(sampleProjectEdocName); // Search for the imported document inside the sample project folder
         deleteSampleProjectFolder(); // Deletes sample project folder and its contents inside it
         client.close();
@@ -82,7 +81,7 @@ public class Sample {
         return result;
     }
 
-    public static void importDocument(int folderEntryId, String sampleProjectFileName) {
+    public static int importDocument(int folderEntryId, String sampleProjectFileName) {
         CreateEntryResult result = null;
         String fileContent = "This is the file content";
         InputStream inputStream = new ByteArrayInputStream(fileContent.getBytes());
@@ -94,7 +93,8 @@ public class Sample {
                 .setAutoRename(true)
                 .setInputStream(inputStream)
                 .setRequestBody(new PostEntryWithEdocMetadataRequest()));
-        tempEdocEntryId = result.getOperations().getEntryCreate().getEntryId();
+        int edocEntryId = result.getOperations().getEntryCreate().getEntryId();
+        return edocEntryId;
     }
 
     public static void setEntryFields() {
@@ -147,7 +147,7 @@ public class Sample {
         return entryFieldResponse;
     }
 
-    public static Map<String, String> getEntryContentType() {
+    public static Map<String, String> getEntryContentType(int tempEdocEntryId) {
         final Map<String, String> documentContentTypeResponse = client.getEntriesClient().getDocumentContentType(
                 new ParametersForGetDocumentContentType().setRepoId(config.getRepositoryId()).setEntryId(tempEdocEntryId));
         System.out.println("Electronic Document Content Type:" + documentContentTypeResponse.get("Content-Type"));
