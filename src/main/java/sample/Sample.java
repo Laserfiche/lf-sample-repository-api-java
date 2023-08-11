@@ -23,8 +23,10 @@ public class Sample {
 
     public static void main(String[] args) {
         config = new ServiceConfig();
+        // Scope(s) requested by the app
+        String scope = "repository.Read,repository.Write";
         if (AuthorizationType.CLOUD_ACCESS_KEY.name().equalsIgnoreCase(config.getAuthorizationType().toString())) {
-            client = createCloudRepositoryApiClient();
+            client = createCloudRepositoryApiClient(scope);
         } else {
             client = createSelfHostedRepositoryApiClient();
         }
@@ -177,8 +179,8 @@ public class Sample {
         System.out.println("\nDeleted all sample project entries");
     }
 
-    public static RepositoryApiClient createCloudRepositoryApiClient() {
-        final RepositoryApiClient repositoryApiClient = RepositoryApiClientImpl.createFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey());
+    public static RepositoryApiClient createCloudRepositoryApiClient(String scope) {
+        final RepositoryApiClient repositoryApiClient = RepositoryApiClientImpl.createFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey(), scope);
         return repositoryApiClient;
     }
 
