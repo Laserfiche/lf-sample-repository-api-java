@@ -35,7 +35,7 @@ public class Sample {
         List<Entry> folderChildren = getFolderChildren(ROOT_FOLDER_ENTRY_ID); // Print root folder children
         Entry createFolder = createFolder(); // Creates a sample project folder
         int tempEdocEntryId = importDocument(tempSampleProjectFolderId, sampleProjectEdocName); // Imports a document inside the sample project folder
-        setEntryFields(); // Set Entry Fields
+        setEntryFields(createFolder.getId()); // Set Entry Fields
         Entry sampleProjectRootFolder = getRootFolder(tempSampleProjectFolderId); // Print root folder name
         List<Entry> sampleProjectRootFolderChildren = getFolderChildren(tempSampleProjectFolderId); // Print root folder children
         ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(); // Print entry Fields
@@ -99,7 +99,7 @@ public class Sample {
         return edocEntryId;
     }
 
-    public static void setEntryFields() {
+    public static void setEntryFields(int sampleProjectFolderEntryId) {
         WFieldInfo field = null;
         final String fieldValue = "Java sample project set entry value";
         final ODataValueContextOfIListOfWFieldInfo fieldDefinitionsResponse = client.getFieldDefinitionsClient().getFieldDefinitions(new ParametersForGetFieldDefinitions().setRepoId(config.getRepositoryId()));
@@ -126,7 +126,7 @@ public class Sample {
         valueToUpdate.setValue(fieldValue);
 
         Entry entry = createEntry(
-                client, "RepositoryApiClientIntegrationTest Java SetFields", tempSampleProjectFolderId, true);
+                client, "RepositoryApiClientIntegrationTest Java SetFields", sampleProjectFolderEntryId, true);
         Integer entryId = entry.getId();
         tempEntryFieldId = entryId;
         System.out.println("\nSetting Entry Fields in the sample project folder...\n");
