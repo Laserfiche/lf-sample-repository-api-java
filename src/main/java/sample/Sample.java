@@ -29,12 +29,12 @@ public class Sample {
             client = createSelfHostedRepositoryApiClient();
         }
         RepositoryInfo[] repositoryNames = getRepositoryInfo(); // Print repository name
-        Entry rootFolder = getRootFolder(ROOT_FOLDER_ENTRY_ID); // Print root folder name
+        Entry rootFolder = getFolder(ROOT_FOLDER_ENTRY_ID); // Print root folder name
         List<Entry> folderChildren = getFolderChildren(ROOT_FOLDER_ENTRY_ID); // Print root folder children
         Entry createFolder = createFolder(); // Creates a sample project folder
         int tempEdocEntryId = importDocument(createFolder.getId(), sampleProjectEdocName); // Imports a document inside the sample project folder
         Entry setEntryFields = setEntryFields(createFolder.getId()); // Set Entry Fields
-        Entry sampleProjectRootFolder = getRootFolder(createFolder.getId()); // Print root folder name
+        Entry sampleProjectRootFolder = getFolder(createFolder.getId()); // Print root folder name
         List<Entry> sampleProjectRootFolderChildren = getFolderChildren(createFolder.getId()); // Print root folder children
         ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(setEntryFields.getId()); // Print entry Fields
         Map<String, String> entryContentType = getEntryContentType(tempEdocEntryId); // Print Edoc Information
@@ -52,7 +52,7 @@ public class Sample {
         return repositoryInfoArray;
     }
 
-    public static Entry getRootFolder(int folderEntryId) {
+    public static Entry getFolder(int folderEntryId) {
         Entry rootEntry = client.getEntriesClient().getEntry(new ParametersForGetEntry().setRepoId(config.getRepositoryId()).setEntryId(folderEntryId));
         EntryType entryType = rootEntry.getEntryType();
         OffsetDateTime createdDate = rootEntry.getCreationTime();
