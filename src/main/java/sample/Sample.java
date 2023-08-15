@@ -33,10 +33,10 @@ public class Sample {
         List<Entry> folderChildren = getFolderChildren(ROOT_FOLDER_ENTRY_ID); // Print root folder children
         Entry createFolder = createFolder(); // Creates a sample project folder
         int tempEdocEntryId = importDocument(createFolder.getId(), sampleProjectEdocName); // Imports a document inside the sample project folder
-        Entry setEntryFields = setEntryFields(createFolder.getId()); // Set Entry Fields
+        setEntryFields(createFolder.getId()); // Set Entry Fields
         Entry sampleProjectRootFolder = getFolder(createFolder.getId()); // Print root folder name
         List<Entry> sampleProjectRootFolderChildren = getFolderChildren(createFolder.getId()); // Print root folder children
-        ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(setEntryFields.getId()); // Print entry Fields
+        ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(createFolder.getId()); // Print entry Fields
         Map<String, String> entryContentType = getEntryContentType(tempEdocEntryId); // Print Edoc Information
         searchForImportedDocument(sampleProjectEdocName); // Search for the imported document inside the sample project folder
         deleteSampleProjectFolder(createFolder.getId()); // Deletes sample project folder and its contents inside it
@@ -96,7 +96,7 @@ public class Sample {
         return edocEntryId;
     }
 
-    public static Entry setEntryFields(int entryId) {
+    public static void setEntryFields(int entryId) {
         WFieldInfo field = null;
         final String fieldValue = "Java sample project set entry value";
         final ODataValueContextOfIListOfWFieldInfo fieldDefinitionsResponse = client.getFieldDefinitionsClient().getFieldDefinitions(new ParametersForGetFieldDefinitions().setRepoId(config.getRepositoryId()));
@@ -122,17 +122,13 @@ public class Sample {
         valueToUpdate.setPosition(1);
         valueToUpdate.setValue(fieldValue);
 
-        Entry entry = createEntry(
-                client, "RepositoryApiClientIntegrationTest Java SetFields", entryId, true);
-        Integer num = entry.getId();
         System.out.println("\nSetting Entry Fields in the sample project folder...\n");
         ODataValueOfIListOfFieldValue assignFieldValuesResponse = client
                 .getEntriesClient()
                 .assignFieldValues(new ParametersForAssignFieldValues()
                         .setRepoId(config.getRepositoryId())
-                        .setEntryId(num)
+                        .setEntryId(entryId)
                         .setRequestBody(requestBody));
-        return entry;
     }
 
     public static ODataValueContextOfIListOfFieldValue getEntryFields(int setFieldsEntryId) {
