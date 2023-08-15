@@ -15,8 +15,6 @@ import java.util.Map;
 
 public class Sample {
     private static final int ROOT_FOLDER_ENTRY_ID = 1;
-    private static int tempSampleProjectFolderId = 0;
-    private static int tempEntryFieldId = 0;
     private static String sampleProjectEdocName = "Java Sample Project GetDocumentContent";
     private static RepositoryApiClient client;
     private static ServiceConfig config;
@@ -34,14 +32,14 @@ public class Sample {
         Entry rootFolder = getRootFolder(ROOT_FOLDER_ENTRY_ID); // Print root folder name
         List<Entry> folderChildren = getFolderChildren(ROOT_FOLDER_ENTRY_ID); // Print root folder children
         Entry createFolder = createFolder(); // Creates a sample project folder
-        int tempEdocEntryId = importDocument(tempSampleProjectFolderId, sampleProjectEdocName); // Imports a document inside the sample project folder
-        setEntryFields(createFolder.getId()); // Set Entry Fields
-        Entry sampleProjectRootFolder = getRootFolder(tempSampleProjectFolderId); // Print root folder name
-        List<Entry> sampleProjectRootFolderChildren = getFolderChildren(tempSampleProjectFolderId); // Print root folder children
-        ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(); // Print entry Fields
+        int tempEdocEntryId = importDocument(createFolder.getId(), sampleProjectEdocName); // Imports a document inside the sample project folder
+        Entry setEntryFields = setEntryFields(createFolder.getId()); // Set Entry Fields
+        Entry sampleProjectRootFolder = getRootFolder(createFolder.getId()); // Print root folder name
+        List<Entry> sampleProjectRootFolderChildren = getFolderChildren(createFolder.getId()); // Print root folder children
+        ODataValueContextOfIListOfFieldValue entryFields = getEntryFields(setEntryFields.getId()); // Print entry Fields
         Map<String, String> entryContentType = getEntryContentType(tempEdocEntryId); // Print Edoc Information
         searchForImportedDocument(sampleProjectEdocName); // Search for the imported document inside the sample project folder
-        deleteSampleProjectFolder(); // Deletes sample project folder and its contents inside it
+        deleteSampleProjectFolder(createFolder.getId()); // Deletes sample project folder and its contents inside it
         client.close();
     }
 
@@ -79,7 +77,6 @@ public class Sample {
         request.setName(newEntryName);
         System.out.println("\nCreating sample project folder...");
         final Entry result = client.getEntriesClient().createOrCopyEntry(new ParametersForCreateOrCopyEntry().setRepoId(config.getRepositoryId()).setEntryId(ROOT_FOLDER_ENTRY_ID).setRequestBody(request).setAutoRename(true));
-        tempSampleProjectFolderId = result.getId();
         return result;
     }
 
@@ -99,7 +96,7 @@ public class Sample {
         return edocEntryId;
     }
 
-    public static void setEntryFields(int sampleProjectFolderEntryId) {
+    public static Entry setEntryFields(int sampleProjectFolderEntryId) {
         WFieldInfo field = null;
         final String fieldValue = "Java sample project set entry value";
         final ODataValueContextOfIListOfWFieldInfo fieldDefinitionsResponse = client.getFieldDefinitionsClient().getFieldDefinitions(new ParametersForGetFieldDefinitions().setRepoId(config.getRepositoryId()));
@@ -128,7 +125,6 @@ public class Sample {
         Entry entry = createEntry(
                 client, "RepositoryApiClientIntegrationTest Java SetFields", sampleProjectFolderEntryId, true);
         Integer entryId = entry.getId();
-        tempEntryFieldId = entryId;
         System.out.println("\nSetting Entry Fields in the sample project folder...\n");
         ODataValueOfIListOfFieldValue assignFieldValuesResponse = client
                 .getEntriesClient()
@@ -136,11 +132,12 @@ public class Sample {
                         .setRepoId(config.getRepositoryId())
                         .setEntryId(entryId)
                         .setRequestBody(requestBody));
+        return entry;
     }
 
-    public static ODataValueContextOfIListOfFieldValue getEntryFields() {
+    public static ODataValueContextOfIListOfFieldValue getEntryFields(int setFieldsEntryId) {
         final ODataValueContextOfIListOfFieldValue entryFieldResponse = client.getEntriesClient().getFieldValues(
-                new ParametersForGetFieldValues().setRepoId(config.getRepositoryId()).setEntryId(tempEntryFieldId));
+                new ParametersForGetFieldValues().setRepoId(config.getRepositoryId()).setEntryId(setFieldsEntryId));
         final FieldValue[] fieldDefinitions = entryFieldResponse.getValue().toArray(new FieldValue[0]);
         System.out.println("Entry Field Name:" + fieldDefinitions[0].getFieldName());
         System.out.println("Entry Field Type:" + fieldDefinitions[0].getFieldType());
@@ -173,9 +170,9 @@ public class Sample {
         System.out.println();
     }
 
-    public static void deleteSampleProjectFolder() {
+    public static void deleteSampleProjectFolder(int sampleProjectFolderEntryId) {
         System.out.println("\nDeleting all sample project entries...");
-        client.getEntriesClient().deleteEntryInfo(new ParametersForDeleteEntryInfo().setRepoId(config.getRepositoryId()).setEntryId(tempSampleProjectFolderId));
+        client.getEntriesClient().deleteEntryInfo(new ParametersForDeleteEntryInfo().setRepoId(config.getRepositoryId()).setEntryId(sampleProjectFolderEntryId));
         System.out.println("\nDeleted all sample project entries");
     }
 
