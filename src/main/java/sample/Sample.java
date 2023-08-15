@@ -96,7 +96,7 @@ public class Sample {
         return edocEntryId;
     }
 
-    public static Entry setEntryFields(int sampleProjectFolderEntryId) {
+    public static Entry setEntryFields(int entryId) {
         WFieldInfo field = null;
         final String fieldValue = "Java sample project set entry value";
         final ODataValueContextOfIListOfWFieldInfo fieldDefinitionsResponse = client.getFieldDefinitionsClient().getFieldDefinitions(new ParametersForGetFieldDefinitions().setRepoId(config.getRepositoryId()));
@@ -123,14 +123,14 @@ public class Sample {
         valueToUpdate.setValue(fieldValue);
 
         Entry entry = createEntry(
-                client, "RepositoryApiClientIntegrationTest Java SetFields", sampleProjectFolderEntryId, true);
-        Integer entryId = entry.getId();
+                client, "RepositoryApiClientIntegrationTest Java SetFields", entryId, true);
+        Integer num = entry.getId();
         System.out.println("\nSetting Entry Fields in the sample project folder...\n");
         ODataValueOfIListOfFieldValue assignFieldValuesResponse = client
                 .getEntriesClient()
                 .assignFieldValues(new ParametersForAssignFieldValues()
                         .setRepoId(config.getRepositoryId())
-                        .setEntryId(entryId)
+                        .setEntryId(num)
                         .setRequestBody(requestBody));
         return entry;
     }
