@@ -22,7 +22,7 @@ public class Sample {
     public static void main(String[] args) {
         config = new ServiceConfig();
         // Scope(s) requested by the app
-        String scope = "repository.Read,repository.Write";
+        String scope = "repository.Read repository.Write";
         if (AuthorizationType.CLOUD_ACCESS_KEY.name().equalsIgnoreCase(config.getAuthorizationType().toString())) {
             client = createCloudRepositoryApiClient(scope);
         } else {
