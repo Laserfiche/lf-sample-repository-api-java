@@ -50,6 +50,9 @@ public class Sample {
         }
     }
 
+    /**
+     * Prints the information of all the available repositories.
+     */
     public static void printAllRepositoryNames() {
         RepositoryCollectionResponse collectionResponse = client.getRepositoryClient().listRepositories();
         for (Repository repository : collectionResponse.getValue()) {
@@ -58,6 +61,9 @@ public class Sample {
         }
     }
 
+    /**
+     * Prints the name of the folder for the given folder's entry Id.
+     */
     public static Entry printFolderName(int folderEntryId) {
         Entry entry = client.getEntriesClient().getEntry(new ParametersForGetEntry()
                 .setRepositoryId(config.getRepositoryId()).setEntryId(folderEntryId));
@@ -67,6 +73,9 @@ public class Sample {
         return entry;
     }
 
+    /**
+     * Prints the information of the child entries of the given folder's entry Id.
+     */
     public static void printFolderChildrenInformation(int folderId) {
         EntryCollectionResponse collectionResponse = client.getEntriesClient().listEntries(new ParametersForListEntries()
                 .setRepositoryId(config.getRepositoryId()).setEntryId(folderId).setGroupByEntryType(true).setOrderby("name"));
@@ -76,6 +85,9 @@ public class Sample {
         }
     }
 
+    /**
+     * Creates a sample folder in the root folder.
+     */
     public static Entry createSampleProjectFolder() {
         final String newEntryName = "Java sample project folder";
         final CreateEntryRequest request = new CreateEntryRequest();
@@ -89,6 +101,9 @@ public class Sample {
         return newEntry;
     }
 
+    /**
+     * Imports a document into the folder specified by the given entry Id.
+     */
     public static int importDocument(int folderEntryId, String sampleProjectFileName) {
         Entry importedEntry = null;
         String fileContent = "This is the file content";
@@ -107,6 +122,9 @@ public class Sample {
         return importedEntry.getId();
     }
 
+    /**
+     * Sets a string field on the entry specified by the given entry Id.
+     */
     public static void setEntryFields(int entryId) {
         final String fieldValue = "Java sample project set entry value";
         final FieldDefinitionCollectionResponse collectionResponse = client.getFieldDefinitionsClient().listFieldDefinitions(
@@ -154,6 +172,9 @@ public class Sample {
         }
     }
 
+    /**
+     * Prints the fields assigned to the entry specified by the given entry Id.
+     */
     public static void printEntryFields(int entryId) {
         final FieldCollectionResponse collectionResponse = client.getEntriesClient().listFields(
                 new ParametersForListFields().setRepositoryId(config.getRepositoryId()).setEntryId(entryId));
@@ -163,6 +184,9 @@ public class Sample {
         }
     }
 
+    /**
+     * Prints the content-type of the electronic document associated with the given entry Id.
+     */
     public static void printEntryContentType(int entryId) {
         ExportEntryRequest request = new ExportEntryRequest();
         request.setPart(ExportEntryRequestPart.EDOC);
@@ -184,6 +208,9 @@ public class Sample {
         }
     }
 
+    /**
+     * Performs a simple search for the given file name, and prints out the search results.
+     */
     public static void searchForImportedDocument(String sampleProjectFileName) {
         final SearchEntryRequest searchRequest = new SearchEntryRequest();
         String searchCommand = "({LF:Basic ~= \"" + sampleProjectFileName + "\", option=\"DFANLT\"})";
@@ -198,6 +225,9 @@ public class Sample {
         }
     }
 
+    /**
+     * Deletes the sample project folder.
+     */
     public static void deleteSampleProjectFolder(int sampleProjectFolderEntryId) {
         System.out.println("Deleting all sample project entries...");
         StartTaskResponse response = client.getEntriesClient().startDeleteEntry(new ParametersForStartDeleteEntry().setRepositoryId(config.getRepositoryId()).setEntryId(sampleProjectFolderEntryId));
@@ -209,6 +239,9 @@ public class Sample {
         System.out.printf("Task Status: %s%n", taskStatus);
     }
 
+    /**
+     * Uses the asynchronous import API to import a large file into the specified folder.
+     */
     public static void importLargeDocument(int folderEntryId) {
         File file = new File("testFiles", "sample.pdf");
         String mimeType = "application/pdf";
@@ -266,6 +299,9 @@ public class Sample {
         }
     }
 
+    /**
+     * Splits the given file into parts of the given size, and writes them into the given URLs. Finally, returns the eTags of the written parts.
+     */
     private static List<String> writeFile(String filePath, List<String> urls, int partSizeInMB) {
         File file = new File(filePath);
         List<String> eTags = new ArrayList<>(urls.size());
@@ -297,14 +333,23 @@ public class Sample {
         return eTags;
     }
 
+    /**
+     * Creates RepositoryApiClient for cloud, from an access key.
+     */
     public static RepositoryApiClient createCloudRepositoryApiClient(String scope) {
         return RepositoryApiClientImpl.createFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey(), scope);
     }
 
+    /**
+     * Creates RepositoryApiClient for self-hosted mode, from a username/password.
+     */
     public static RepositoryApiClient createSelfHostedRepositoryApiClient() {
         return RepositoryApiClientImpl.createFromUsernamePassword(config.getRepositoryId(), config.getUsername(), config.getPassword(), config.getBaseUrl());
     }
 
+    /**
+     * Searches for the audit reason for export operation, and if found, returns its Id. Otherwise, returns -1.
+     */
     private static int getAuditReasonIdForExport() {
         int exportAuditReasonId = -1;
         AuditReasonCollectionResponse auditReasons = client.getAuditReasonsClient().listAuditReasons(
@@ -316,6 +361,9 @@ public class Sample {
         return exportAuditReasonId;
     }
 
+    /**
+     * Prints the information of the given ProblemDetails object.
+     */
     private static void printProblemDetails(ProblemDetails problemDetails) {
         System.out.printf("ProblemDetails: (Title: %s, Status: %d, Detail: %s, Type: %s, Instance: %s, ErrorCode: %d, ErrorSource: %s)%n",
                 problemDetails.getTitle(),
