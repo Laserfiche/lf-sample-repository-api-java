@@ -100,6 +100,5 @@ java -jar target/lf-sample-repository-api-1.0.0-jar-with-dependencies.jar
 
 These commands will install, compile, and execute this program which will print out the repository information in the
 output window.
-Note: This project uses the [@laserfiche/lf-repository-api-client
-Maven Central package](https://central.sonatype.com/artifact/com.laserfiche/lf-repository-api-client/2.0.2).
+Note: This project uses the [@laserfiche/lf-repository-api-client-v2](https://central.sonatype.com/artifact/com.laserfiche/lf-repository-api-client-v2) Maven Central package.
 See [Laserfiche Repository API Documentation](https://developer.laserfiche.com/libraries.html).
