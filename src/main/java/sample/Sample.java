@@ -1,13 +1,14 @@
 package sample;
 
+import com.laserfiche.api.client.model.ProblemDetails;
 import com.laserfiche.repository.api.RepositoryApiClient;
 import com.laserfiche.repository.api.RepositoryApiClientImpl;
 import com.laserfiche.repository.api.clients.impl.model.*;
 import com.laserfiche.repository.api.clients.params.*;
 import org.threeten.bp.OffsetDateTime;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class Sample {
             printEntryFields(importedEntryId);
             printEntryContentType(importedEntryId);
             searchForImportedDocument(sampleProjectDocumentName);
+            importLargeDocument(sampleFolderEntry.getId());
         } finally {
             if (sampleFolderEntry != null) {
                 deleteSampleProjectFolder(sampleFolderEntry.getId());
@@ -207,6 +209,94 @@ public class Sample {
         System.out.printf("Task Status: %s%n", taskStatus);
     }
 
+    public static void importLargeDocument(int folderEntryId) {
+        File file = new File("testFiles", "sample.pdf");
+        String mimeType = "application/pdf";
+
+        // Step 1: Get upload URLs
+        int parts = 2;
+        int partSizeInMB = 5;
+        CreateMultipartUploadUrlsRequest requestBody = new CreateMultipartUploadUrlsRequest();
+        requestBody.setFileName(file.getName());
+        requestBody.setMimeType(mimeType);
+        requestBody.setNumberOfParts(parts);
+
+        System.out.println("Requesting upload URLs...");
+        CreateMultipartUploadUrlsResponse response = client.getEntriesClient().createMultipartUploadUrls(new ParametersForCreateMultipartUploadUrls()
+                .setRepositoryId(config.getRepositoryId()).setRequestBody(requestBody));
+
+        String uploadId = response.getUploadId();
+
+        // Step 2: Write file part into upload URLs
+        System.out.println("Writing file parts to upload URLs...");
+        List<String> eTags = writeFile(file.getPath(), response.getUrls(), partSizeInMB);
+
+        // Step 3: Call ImportUploadedParts API
+        System.out.println("Starting the import task...");
+        StartImportUploadedPartsRequest requestBody2 = new StartImportUploadedPartsRequest();
+        requestBody2.setUploadId(uploadId);
+        requestBody2.setAutoRename(true);
+        requestBody2.setPartETags(eTags);
+        requestBody2.setName(file.getName());
+        ImportEntryRequestPdfOptions pdfOptions = new ImportEntryRequestPdfOptions();
+        pdfOptions.setGeneratePages(true);
+        pdfOptions.setKeepPdfAfterImport(true);
+        requestBody2.setPdfOptions(pdfOptions);
+        StartTaskResponse response2 = client.getEntriesClient().startImportUploadedParts(new ParametersForStartImportUploadedParts()
+                .setRepositoryId(config.getRepositoryId())
+                .setEntryId(folderEntryId)
+                .setRequestBody(requestBody2));
+
+        String taskId = response2.getTaskId();
+        System.out.printf("Task Id: %s%n", taskId);
+
+        // Check/print the status of the import task.
+        TaskCollectionResponse tasks = client.getTasksClient().listTasks(new ParametersForListTasks().setRepositoryId(config.getRepositoryId()).setTaskIds(taskId));
+        TaskProgress taskProgress = tasks.getValue().get(0);
+        System.out.printf("Task Status: %s%n", taskProgress.getStatus());
+        switch (taskProgress.getStatus()) {
+            case COMPLETED:
+                System.out.printf("Entry Id: %d%n", taskProgress.getResult().getEntryId());
+                break;
+            case FAILED:
+                for (ProblemDetails problemDetails : taskProgress.getErrors()) {
+                    printProblemDetails(problemDetails);
+                }
+                break;
+        }
+    }
+
+    private static List<String> writeFile(String filePath, List<String> urls, int partSizeInMB) {
+        File file = new File(filePath);
+        List<String> eTags = new ArrayList<>(urls.size());
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            for (String uploadUrl : urls) {
+                byte[] buffer = new byte[partSizeInMB * 1024 * 1024];
+                int numberOfBytesRead = inputStream.read(buffer);
+
+                URL url = new URL(uploadUrl);
+                HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+                httpCon.setDoOutput(true);
+                httpCon.setRequestMethod("PUT");
+                httpCon.setRequestProperty("Content-Type", "application/octet-stream");
+
+                DataOutputStream outputStream = new DataOutputStream(
+                        httpCon.getOutputStream());
+                outputStream.write(buffer, 0, numberOfBytesRead);
+                outputStream.flush();
+                outputStream.close();
+                if (httpCon.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    String eTag = httpCon.getHeaderField("ETag");
+                    eTags.add(eTag);
+                }
+                httpCon.disconnect();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return eTags;
+    }
+
     public static RepositoryApiClient createCloudRepositoryApiClient(String scope) {
         return RepositoryApiClientImpl.createFromAccessKey(config.getServicePrincipalKey(), config.getAccessKey(), scope);
     }
@@ -224,5 +314,16 @@ public class Sample {
             exportAuditReasonId = exportAuditReason.get().getId();
         }
         return exportAuditReasonId;
+    }
+
+    private static void printProblemDetails(ProblemDetails problemDetails) {
+        System.out.printf("ProblemDetails: (Title: %s, Status: %d, Detail: %s, Type: %s, Instance: %s, ErrorCode: %d, ErrorSource: %s)%n",
+                problemDetails.getTitle(),
+                problemDetails.getStatus(),
+                problemDetails.getDetail(),
+                problemDetails.getType(),
+                problemDetails.getInstance(),
+                problemDetails.getErrorCode(),
+                problemDetails.getErrorSource());
     }
 }
