@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class Sample {
     private static final int ROOT_FOLDER_ENTRY_ID = 1;
-    private static String sampleProjectDocumentName = "Java Sample Project Document";
+    private static final String sampleProjectDocumentName = "Java Sample Project Document";
     private static RepositoryApiClient client;
     private static ServiceConfig config;
 
@@ -218,7 +218,7 @@ public class Sample {
     private static int getAuditReasonIdForExport() {
         int exportAuditReasonId = -1;
         AuditReasonCollectionResponse auditReasons = client.getAuditReasonsClient().listAuditReasons(
-                        new ParametersForListAuditReasons().setRepositoryId(config.getRepositoryId()));
+                new ParametersForListAuditReasons().setRepositoryId(config.getRepositoryId()));
         Optional<AuditReason> exportAuditReason = auditReasons.getValue().stream().filter(auditReason -> auditReason.getAuditEventType() == AuditEventType.EXPORT_DOCUMENT).findFirst();
         if (exportAuditReason.isPresent()) {
             exportAuditReasonId = exportAuditReason.get().getId();
