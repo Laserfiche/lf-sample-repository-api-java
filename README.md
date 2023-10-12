@@ -70,23 +70,7 @@ REPOSITORY_ID="<Repository ID from the 'Repository Administration' page>"
 
 ### 1. Clone this repo on your local machine
 
-### 2. Create a .env file
-
-- In the root directory of this project, create a .env file containing the following lines:
-
-```
-AUTHORIZATION_TYPE="API_SERVER_USERNAME_PASSWORD" 
-
-REPOSITORY_ID="<Repository Name>"
-
-APISERVER_USERNAME="<Username>"
-
-APISERVER_PASSWORD="<Password>"
-
-APISERVER_REPOSITORY_API_BASE_URL="<API Server Base Url (ex: https://example.com/LFRepositoryAPI)>"
-```
-- Note: The .env file is used in local development environment to set operating system environment variables.
-  - DO NOT check-in the .env file in Git.
+See [this page](https://github.com/Laserfiche/lf-sample-repository-api-java/tree/v1#self-hosted-prerequisites).
 
 ## Build and Run this App
 
