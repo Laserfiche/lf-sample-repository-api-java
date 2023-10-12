@@ -6,11 +6,11 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class ServiceConfig {
     private String servicePrincipalKey;
     private AccessKey accessKey;
-    private String repositoryId;
+    private final String repositoryId;
     private String username;
     private String password;
     private String baseUrl;
-    private AuthorizationType authorizationType;
+    private final AuthorizationType authorizationType;
     public static final String ACCESS_KEY = "ACCESS_KEY";
     public static final String SERVICE_PRINCIPAL_KEY = "SERVICE_PRINCIPAL_KEY";
     public static final String REPOSITORY_ID = "REPOSITORY_ID";
