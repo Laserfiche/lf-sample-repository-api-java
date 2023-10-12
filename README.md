@@ -62,14 +62,6 @@ REPOSITORY_ID="<Repository ID from the 'Repository Administration' page>"
 
 ## Self-Hosted Prerequisites
 
-### Software Prerequisites
-
-- Apache Maven 3.8.5+
-- Java 8+
-- Set up Self-Hosted API Server 1.0+
-
-### 1. Clone this repo on your local machine
-
 See [this page](https://github.com/Laserfiche/lf-sample-repository-api-java/tree/v1#self-hosted-prerequisites).
 
 ## Build and Run this App
